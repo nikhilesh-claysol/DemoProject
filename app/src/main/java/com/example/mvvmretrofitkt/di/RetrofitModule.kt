@@ -2,6 +2,8 @@ package com.example.mvvmretrofitkt.di
 
 import com.example.mvvmretrofitkt.network.APIService
 import com.example.mvvmretrofitkt.network.RetroInstance
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -20,11 +22,17 @@ class RetrofitModule  {
                 .build()
     }
     @Provides
-    fun gsonConverterFactory():GsonConverterFactory{
-        return GsonConverterFactory.create()
+    fun gsonConverterFactory(gson: Gson):GsonConverterFactory{
+        return GsonConverterFactory.create(gson)
     }
     @Provides
     fun apiService(retrofit: Retrofit):APIService{
         return retrofit.create(APIService::class.java)
+    }
+    @Provides
+    fun gson():Gson{
+        return GsonBuilder()
+                .serializeNulls()
+                .create()
     }
 }

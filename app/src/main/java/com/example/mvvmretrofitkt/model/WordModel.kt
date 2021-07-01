@@ -3,7 +3,7 @@ package com.example.mvvmretrofitkt.model
 import com.google.gson.annotations.SerializedName
 
 
-data class WordModelItem(
+data class WordModel(
     @SerializedName("score")
     val score: Int?,
     @SerializedName("tags")

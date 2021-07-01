@@ -2,17 +2,10 @@ package com.example.mvvmretrofitkt.repo
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.example.mvvmretrofitkt.di.AppComponent
-import com.example.mvvmretrofitkt.di.DaggerAppComponent
 import com.example.mvvmretrofitkt.di.DaggerSingleton.Companion.daggerAppComponent
-import com.example.mvvmretrofitkt.di.RetrofitModule
-
-import com.example.mvvmretrofitkt.model.WordModelItem
-
+import com.example.mvvmretrofitkt.model.WordModel
 import com.example.mvvmretrofitkt.network.APIService
-import com.example.mvvmretrofitkt.network.RetroInstance
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
 import okhttp3.ResponseBody
@@ -24,31 +17,31 @@ import java.io.IOException
 import javax.inject.Inject
 
 class MyRepo() {
-    private var allWordList: MutableLiveData<ArrayList<WordModelItem>> = MutableLiveData()
+    private var allWordList: MutableLiveData<ArrayList<WordModel>> = MutableLiveData()
     @Inject
     lateinit var apiService: APIService
-    fun callAPI(searchWord: String): MutableLiveData<ArrayList<WordModelItem>> {
-        var wordModelList: ArrayList<WordModelItem> = ArrayList();
+    fun callAPI(searchWord: String): MutableLiveData<ArrayList<WordModel>> {
+        var wordModelList: ArrayList<WordModel> = ArrayList();
         if (daggerAppComponent != null) {
-            Log.d("x25", "callAPI: ")
             apiService = daggerAppComponent.getAPIService()
         }
-        var call: Call<ResponseBody> =
+        var call: Call<List<WordModel>> =
                 apiService.getWords(searchWord)
 
-        call.enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+        call.enqueue(object : Callback<List<WordModel>> {
+            override fun onResponse(call: Call<List<WordModel>>, response: Response<List<WordModel>>) {
                 if (response.isSuccessful) {
                     try {
-                        Log.d("x23", "onResponse: " + response.body()?.string())
-                        val gson: Gson = Gson()
-                        val typeToken = object : TypeToken<List<WordModelItem>>() {}.type
-                        val wordModel = gson.fromJson<List<WordModelItem>>(response.body()?.string(),typeToken)
+////                        Log.d("x23", "onResponse: " + response)
+//                        val gson: Gson = Gson()
+//                        val typeToken = object : TypeToken<List<WordModel>>() {}.type
+                        //val wordModel = gson.fromJson<List<WordModel>>(response.body()?.string(),typeToken)
+                        val wordModel = response.body()
 
-                        Log.d("x25", "onResponse: " + wordModel?.size)
+//                        Log.d("x25", "onResponse: " + wordModel?.size)
                         if (wordModel != null) {
-                            wordModelList.clear()
-                            // wordModelList.addAll(wordModel)
+                            //wordModelList.clear()
+                            wordModelList = wordModel as ArrayList<WordModel>
                             Log.d("x25", "onResponse: ")
                             allWordList.postValue(wordModelList)
                         }
@@ -64,9 +57,10 @@ class MyRepo() {
                 }
             }
 
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+            override fun onFailure(call: Call<List<WordModel>>, t: Throwable) {
                 allWordList.postValue(null)
             }
+
 
         })
         return allWordList
