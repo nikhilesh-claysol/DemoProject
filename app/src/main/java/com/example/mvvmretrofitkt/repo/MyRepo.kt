@@ -2,13 +2,11 @@ package com.example.mvvmretrofitkt.repo
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.example.mvvmretrofitkt.di.DaggerSingleton.Companion.daggerAppComponent
+import com.example.mvvmretrofitkt.Util.DaggerSingleton.Companion.daggerAppComponent
+//import com.example.mvvmretrofitkt.Util.DaggerSingleton.Companion.daggerAppComponent
 import com.example.mvvmretrofitkt.model.WordModel
 import com.example.mvvmretrofitkt.network.APIService
-import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
-import com.google.gson.reflect.TypeToken
-import okhttp3.ResponseBody
 import org.json.JSONException
 import retrofit2.Call
 import retrofit2.Callback
@@ -32,15 +30,13 @@ class MyRepo() {
             override fun onResponse(call: Call<List<WordModel>>, response: Response<List<WordModel>>) {
                 if (response.isSuccessful) {
                     try {
-////                        Log.d("x23", "onResponse: " + response)
+                        Log.d("x23", "onResponse: $response")
 //                        val gson: Gson = Gson()
 //                        val typeToken = object : TypeToken<List<WordModel>>() {}.type
                         //val wordModel = gson.fromJson<List<WordModel>>(response.body()?.string(),typeToken)
                         val wordModel = response.body()
 
-//                        Log.d("x25", "onResponse: " + wordModel?.size)
                         if (wordModel != null) {
-                            //wordModelList.clear()
                             wordModelList = wordModel as ArrayList<WordModel>
                             Log.d("x25", "onResponse: ")
                             allWordList.postValue(wordModelList)

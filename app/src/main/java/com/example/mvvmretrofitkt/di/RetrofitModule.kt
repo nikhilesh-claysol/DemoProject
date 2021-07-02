@@ -13,6 +13,7 @@ import javax.inject.Singleton
 
 @Module
 class RetrofitModule  {
+    @Singleton
     @Provides
     fun retrofit(gsonConverterFactory: GsonConverterFactory):Retrofit{
         val baseUrl = "https://api.datamuse.com/"
