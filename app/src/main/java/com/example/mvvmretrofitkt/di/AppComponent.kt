@@ -11,7 +11,7 @@ import javax.inject.Singleton
 @Singleton
 @Component(modules = [RetrofitModule::class,RepoModule::class,AndroidSupportInjectionModule::class,ViewModelFactoryModule::class,ViewModelModule::class])
 interface AppComponent : AndroidInjector<MainActivity>{
-    fun getAPIService():APIService
-    fun getRepo():MyRepo
+//    fun getAPIService():APIService
+//    fun getRepo():MyRepo
 //    fun getViewModelFactory():ViewModelFactory
 }

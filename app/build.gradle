@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.mvvmretrofitkt"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -53,6 +53,10 @@ dependencies {
     implementation 'com.google.dagger:dagger-android:2.35.1'
     implementation 'com.google.dagger:dagger-android-support:2.33' // if you use the support libraries
 //    kapt 'com.google.dagger:dagger-android-processor:2.33'
+
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+    implementation 'io.reactivex.rxjava3:rxjava:3.0.3'
+    implementation "com.github.akarnokd:rxjava3-retrofit-adapter:3.0.0"
 
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     testImplementation 'junit:junit:4.13.2'

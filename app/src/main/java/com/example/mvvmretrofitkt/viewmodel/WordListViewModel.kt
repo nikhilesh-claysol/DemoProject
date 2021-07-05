@@ -9,9 +9,7 @@ import com.example.mvvmretrofitkt.model.WordModel
 import com.example.mvvmretrofitkt.repo.MyRepo
 import javax.inject.Inject
 
-class WordListViewModel @Inject constructor(repo: MyRepo) : BaseViewModel() {
-    @Inject
-    lateinit var repo:MyRepo
+class WordListViewModel @Inject constructor(var repo: MyRepo) : BaseViewModel() {
     fun loadData(searchWord:String):MutableLiveData<ArrayList<WordModel>>{
         return repo.callAPI(searchWord)
     }

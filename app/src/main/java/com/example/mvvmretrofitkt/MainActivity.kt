@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() ,HasAndroidInjector{
         binding.recyclerView.layoutManager = linearLayout
         wordListAdapter = WordListAdapter(this,wordModelList);
         binding.recyclerView.adapter = wordListAdapter
-        binding.etSearch.setOnEditorActionListener { v, actionId, event ->
+        binding.etSearch.setOnEditorActionListener { v, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 var searchWord = v?.text.toString();
                 searchWord = searchWord.replace(' ', '+')

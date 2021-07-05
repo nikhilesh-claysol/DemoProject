@@ -1,5 +1,6 @@
 package com.example.mvvmretrofitkt.di
 
+import com.example.mvvmretrofitkt.network.APIService
 import com.example.mvvmretrofitkt.repo.MyRepo
 import dagger.Module
 import dagger.Provides
@@ -9,7 +10,7 @@ import javax.inject.Singleton
 class RepoModule {
     @Singleton
     @Provides
-    fun repo():MyRepo {
-        return MyRepo()
+    fun repo(apiService: APIService):MyRepo {
+        return MyRepo(apiService)
     }
 }

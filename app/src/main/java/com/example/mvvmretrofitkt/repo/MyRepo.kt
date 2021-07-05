@@ -1,65 +1,62 @@
 package com.example.mvvmretrofitkt.repo
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.example.mvvmretrofitkt.Util.DaggerSingleton.Companion.daggerAppComponent
-//import com.example.mvvmretrofitkt.Util.DaggerSingleton.Companion.daggerAppComponent
 import com.example.mvvmretrofitkt.model.WordModel
 import com.example.mvvmretrofitkt.network.APIService
-import com.google.gson.JsonSyntaxException
-import org.json.JSONException
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.io.IOException
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 
-class MyRepo() {
+class MyRepo  @Inject constructor(var apiService: APIService) {
     private var allWordList: MutableLiveData<ArrayList<WordModel>> = MutableLiveData()
-    @Inject
-    lateinit var apiService: APIService
+
     fun callAPI(searchWord: String): MutableLiveData<ArrayList<WordModel>> {
-        var wordModelList: ArrayList<WordModel> = ArrayList();
-        if (daggerAppComponent != null) {
-            apiService = daggerAppComponent.getAPIService()
-        }
-        var call: Call<List<WordModel>> =
-                apiService.getWords(searchWord)
-
-        call.enqueue(object : Callback<List<WordModel>> {
-            override fun onResponse(call: Call<List<WordModel>>, response: Response<List<WordModel>>) {
-                if (response.isSuccessful) {
-                    try {
-                        Log.d("x23", "onResponse: $response")
-//                        val gson: Gson = Gson()
-//                        val typeToken = object : TypeToken<List<WordModel>>() {}.type
-                        //val wordModel = gson.fromJson<List<WordModel>>(response.body()?.string(),typeToken)
-                        val wordModel = response.body()
-
-                        if (wordModel != null) {
-                            wordModelList = wordModel as ArrayList<WordModel>
-                            Log.d("x25", "onResponse: ")
-                            allWordList.postValue(wordModelList)
-                        }
-                    } catch (e: JSONException) {
-                        e.printStackTrace();
-                    } catch (e: IOException) {
-                        e.printStackTrace();
-                    } catch (e: IllegalStateException) {
-                        e.printStackTrace()
-                    } catch (e: JsonSyntaxException) {
-                        e.printStackTrace()
-                    }
+        apiService.getWords(searchWord)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    allWordList.postValue(it)
                 }
-            }
-
-            override fun onFailure(call: Call<List<WordModel>>, t: Throwable) {
-                allWordList.postValue(null)
-            }
-
-
-        })
         return allWordList
+//        var wordModelList: ArrayList<WordModel>
+//        val call: Call<List<WordModel>> =
+//                apiService.getWords(searchWord)
+//
+//        call.enqueue(object : Callback<List<WordModel>> {
+//            override fun onResponse(call: Call<List<WordModel>>, response: Response<List<WordModel>>) {
+//                if (response.isSuccessful) {
+//                    try {
+//                        Log.d("x23", "onResponse: $response")
+//                        val wordModel = response.body()
+//
+//                        if (wordModel != null) {
+//                            wordModelList = wordModel as ArrayList<WordModel>
+//                            Log.d("x25", "onResponse: ")
+//                            allWordList.postValue(wordModelList)
+//                        }
+//                    } catch (e: JSONException) {
+//                        allWordList.postValue(null)
+//                        e.printStackTrace();
+//                    } catch (e: IOException) {
+//                        allWordList.postValue(null)
+//                        e.printStackTrace();
+//                    } catch (e: IllegalStateException) {
+//                        allWordList.postValue(null)
+//                        e.printStackTrace()
+//                    } catch (e: JsonSyntaxException) {
+//                        allWordList.postValue(null)
+//                        e.printStackTrace()
+//                    }
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<List<WordModel>>, t: Throwable) {
+//                allWordList.postValue(null)
+//            }
+//
+//
+//        })
+//        return allWordList
 
     }
 }
